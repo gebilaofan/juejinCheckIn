@@ -8,7 +8,7 @@ const logs = [];
 
 // 请求配置
 axios.defaults.baseURL = config.baseUrl;
-axios.defaults.headers['cookie'] = config.cookie;
+axios.defaults.headers['cookie'] = process.env.COOKIE;
 
 // 相应拦截处理
 axios.interceptors.response.use(
@@ -209,20 +209,20 @@ const sendEmail = async () => {
       fs.readFileSync(path.resolve(__dirname, 'email.ejs'), 'utf8')
     );
     const transporter = nodemailer.createTransport({
-      service: config.SERVICE, // 邮箱服务
+      service: process.env.SERVICE, // 邮箱服务
       port: 465,
       secure: true,
       secureConnection: true,
       auth: {
-        user: config.EMAIL, // 发送者邮箱
-        pass: config.PASS // 邮箱授权码
+        user: process.env.EMAIL, // 发送者邮箱
+        pass: process.env.PASS // 邮箱授权码
       }
     });
 
     // 发送邮件
     await transporter.sendMail({
-      from: config.EMAIL,
-      to: config.EMAIL,
+      from: process.env.EMAIL,
+      to: process.env.EMAIL,
       subject: '掘金签到通知🔔',
       html: template({
         logs: logs
